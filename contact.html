@@ -102,13 +102,32 @@
   .platform-name { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; }
   .platform-type { font-size: 0.62rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.1rem; }
 
-  /* FAQ SECTION */
+  /* FAQ ACCORDION */
   .faq-section { margin-top: 5rem; }
   .faq-title { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 2rem; }
   .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.4rem; }
-  .faq-q { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--accent); }
-  .faq-a { font-size: 0.77rem; color: var(--muted); line-height: 1.8; }
+  .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; transition: border-color 0.3s; }
+  .faq-item:hover { border-color: rgba(0,229,160,0.3); }
+  .faq-item.open { border-color: rgba(0,229,160,0.4); }
+  .faq-q {
+    font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700;
+    color: var(--text); padding: 1.3rem 1.4rem;
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    cursor: pointer; user-select: none; transition: color 0.2s;
+  }
+  .faq-item.open .faq-q { color: var(--accent); }
+  .faq-chevron {
+    flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%;
+    border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; color: var(--muted); transition: all 0.3s;
+  }
+  .faq-item.open .faq-chevron { background: var(--accent); border-color: var(--accent); color: #000; transform: rotate(180deg); }
+  .faq-a {
+    font-size: 0.77rem; color: var(--muted); line-height: 1.8;
+    padding: 0 1.4rem; max-height: 0; overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+  }
+  .faq-item.open .faq-a { max-height: 200px; padding: 0 1.4rem 1.3rem; }
 
   /* FOOTER */
   footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 0.7rem; }
@@ -162,12 +181,12 @@
 
 <!-- NAV -->
 <nav>
-  <a href="portfolio.html" class="nav-logo">[ PM ]</a>
+  <a href="index.html" class="nav-logo">[ PM ]</a>
   <ul class="nav-links">
-    <li><a href="portfolio.html#home">Home</a></li>
+    <li><a href="index.html#home">Home</a></li>
     <li><a href="about.html">About</a></li>
-    <li><a href="portfolio.html#projects">Projects</a></li>
-    <li><a href="portfolio.html#skills">Skills</a></li>
+    <li><a href="index.html#projects">Projects</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
     <li><a href="store.html">Store</a></li>
     <li><a href="contact.html" class="active">Contact</a></li>
   </ul>
@@ -320,7 +339,7 @@
         <p class="success-msg">Thanks for reaching out. I'll review your project details and get back to you within 24 hours with a clear scope, timeline, and price.<br><br>In the meantime, feel free to browse the store or check out my projects.</p>
         <div style="display:flex;gap:1rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap;">
           <a href="store.html" style="font-size:0.75rem;color:var(--accent);text-decoration:none;border:1px solid rgba(0,229,160,0.25);padding:0.5rem 1rem;border-radius:6px;">↗ Visit Store</a>
-          <a href="portfolio.html#projects" style="font-size:0.75rem;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:0.5rem 1rem;border-radius:6px;">↗ View Projects</a>
+          <a href="index.html#projects" style="font-size:0.75rem;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:0.5rem 1rem;border-radius:6px;">↗ View Projects</a>
         </div>
       </div>
     </div>
@@ -378,12 +397,12 @@
       </div>
     </div>
   </div>
- 
+
 </div>
 
 <footer>
   <span>© 2025 Purity Musambi</span>
-  <a href="portfolio.html">← Back to Portfolio</a>
+  <a href="index.html">← Back to Portfolio</a>
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
