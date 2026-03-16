@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Analyst Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f; --surface: #111118; --card: #16161f; --border: #2a2a3a;
+    --accent: #00e5a0; --accent2: #7c6aff; --text: #e8e8f0; --muted: #6b6b80;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; overflow-x: hidden; line-height: 1.6; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events: none; z-index: 999; opacity: 0.4; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 3rem; background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--accent); letter-spacing: -0.02em; text-decoration: none; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--accent); }
+
+  .hero { min-height: 100vh; display: flex; align-items: center; padding: 8rem 3rem 4rem; position: relative; overflow: hidden; }
+  .hero-grid-bg { position: absolute; inset: 0; background-image: linear-gradient(rgba(0,229,160,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,160,0.04) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%); }
+  .hero-glow { position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(0,229,160,0.08) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; }
+  .hero-content { position: relative; max-width: 900px; }
+  .hero-tag { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(0,229,160,0.08); border: 1px solid rgba(0,229,160,0.2); color: var(--accent); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.4rem 1rem; border-radius: 100px; margin-bottom: 2rem; animation: fadeUp 0.6s ease both; }
+  .hero-tag::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+  .hero h1 { font-family: 'Syne', sans-serif; font-size: clamp(3rem,8vw,6.5rem); font-weight: 800; line-height: 0.95; letter-spacing: -0.03em; margin-bottom: 1.5rem; animation: fadeUp 0.6s 0.1s ease both; }
+  .hero h1 .accent { color: var(--accent); }
+  .hero h1 .accent2 { color: var(--accent2); }
+  .hero-sub { font-size: 1rem; color: var(--muted); max-width: 540px; line-height: 1.8; margin-bottom: 2.5rem; animation: fadeUp 0.6s 0.2s ease both; }
+  .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeUp 0.6s 0.3s ease both; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+  .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.8rem 1.8rem; border-radius: 6px; font-family: 'DM Mono', monospace; font-size: 0.8rem; letter-spacing: 0.05em; text-decoration: none; cursor: pointer; transition: all 0.2s; border: none; }
+  .btn-primary { background: var(--accent); color: #000; font-weight: 500; }
+  .btn-primary:hover { background: #00ffb3; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,229,160,0.3); }
+  .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  .stats-bar { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1.5rem 3rem; display: flex; gap: 3rem; overflow-x: auto; }
+  .stat { display: flex; flex-direction: column; gap: 0.2rem; white-space: nowrap; }
+  .stat-number { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--accent); }
+  .stat-label { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  section { padding: 6rem 3rem; max-width: 1100px; margin: 0 auto; }
+  .section-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 3rem; }
+  .section-num { font-size: 0.7rem; color: var(--accent); letter-spacing: 0.1em; }
+  .section-title { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem,4vw,2.8rem); font-weight: 800; letter-spacing: -0.02em; }
+  .section-line { flex: 1; height: 1px; background: var(--border); }
+
+  .projects-grid { display: grid; gap: 1.5rem; }
+  .project-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; position: relative; overflow: hidden; transition: border-color 0.3s, transform 0.3s; }
+  .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+  .project-card:hover { border-color: rgba(0,229,160,0.3); transform: translateY(-3px); }
+  .project-card:hover::before { transform: scaleX(1); }
+  .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; gap: 1rem; }
+  .project-number { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+  .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .tag { font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.25rem 0.6rem; border-radius: 4px; background: rgba(124,106,255,0.1); color: var(--accent2); border: 1px solid rgba(124,106,255,0.2); }
+  .tag.green { background: rgba(0,229,160,0.08); color: var(--accent); border-color: rgba(0,229,160,0.2); }
+  .project-title { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .project-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.8; margin-bottom: 1.5rem; }
+  .project-metrics { display: flex; gap: 2rem; padding: 1rem 0; border-top: 1px solid var(--border); flex-wrap: wrap; }
+  .metric { display: flex; flex-direction: column; gap: 0.2rem; }
+  .metric-val { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--accent); }
+  .metric-key { font-size: 0.6rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .project-links { display: flex; gap: 1rem; margin-top: 1.5rem; }
+  .project-link { font-size: 0.7rem; color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: 0.3rem; transition: color 0.2s; }
+  .project-link:hover { color: var(--accent); }
+
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 1rem; }
+  .skill-group { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; }
+  .skill-group-title { font-size: 0.65rem; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
+  .skill-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .skill-pill { font-size: 0.72rem; padding: 0.35rem 0.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; color: var(--text); transition: all 0.2s; }
+  .skill-pill:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── STORE PREVIEW ── */
+  .store-intro { font-size: 0.85rem; color: var(--muted); line-height: 1.8; max-width: 600px; margin-bottom: 3rem; }
+  .store-block { margin-bottom: 3rem; }
+  .store-block-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border); }
+  .store-block-label { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; }
+  .view-all { font-size: 0.7rem; color: var(--accent); text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid rgba(0,229,160,0.25); padding: 0.38rem 0.9rem; border-radius: 100px; transition: all 0.2s; display: flex; align-items: center; gap: 0.3rem; }
+  .view-all:hover { background: rgba(0,229,160,0.08); }
+
+  .featured-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; transition: border-color 0.3s, transform 0.3s; position: relative; }
+  .featured-card::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, var(--accent), var(--accent2)); }
+  .featured-card:hover { border-color: rgba(0,229,160,0.35); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+  .featured-icon { min-width: 140px; display: flex; align-items: center; justify-content: center; font-size: 3rem; background: var(--surface); border-right: 1px solid var(--border); position: relative; overflow: hidden; }
+  .featured-icon::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(0,229,160,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,160,0.05) 1px, transparent 1px); background-size: 20px 20px; }
+  .featured-body { padding: 1.8rem 2rem; flex: 1; display: flex; flex-direction: column; gap: 0.6rem; }
+  .featured-cat { font-size: 0.62rem; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; }
+  .featured-title { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; }
+  .featured-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.8; flex: 1; }
+  .featured-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 1rem; border-top: 1px solid var(--border); margin-top: 0.5rem; gap: 1rem; flex-wrap: wrap; }
+  .featured-price { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; color: var(--accent); }
+  .featured-price .orig { font-size: 0.72rem; color: var(--muted); text-decoration: line-through; font-weight: 400; font-family: 'DM Mono'; margin-left: 0.3rem; }
+  .featured-variants { font-size: 0.68rem; color: var(--muted); margin-top: 0.15rem; }
+  .featured-variants span { color: var(--accent2); }
+  .btn-view { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.06em; padding: 0.55rem 1.2rem; border-radius: 6px; text-decoration: none; background: rgba(0,229,160,0.08); color: var(--accent); border: 1px solid rgba(0,229,160,0.25); transition: all 0.2s; white-space: nowrap; }
+  .btn-view:hover { background: var(--accent); color: #000; }
+
+  .store-badge { position: absolute; top: 0.7rem; right: 0.7rem; font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.22rem 0.55rem; border-radius: 4px; font-family: 'DM Mono'; }
+  .badge-hot { background: rgba(255,100,80,0.15); color: #ff6450; border: 1px solid rgba(255,100,80,0.25); }
+  .badge-ai  { background: rgba(124,106,255,0.12); color: var(--accent2); border: 1px solid rgba(124,106,255,0.2); }
+
+  .sub-note { margin-top: 1rem; padding: 1rem 1.3rem; border-radius: 8px; font-size: 0.75rem; color: var(--muted); line-height: 1.8; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .sub-note.purple { background: rgba(124,106,255,0.06); border: 1px solid rgba(124,106,255,0.15); }
+  .sub-note.green  { background: rgba(0,229,160,0.04); border: 1px solid rgba(0,229,160,0.12); }
+  .sub-note span.hi { color: var(--accent2); }
+  .sub-note-link { font-size: 0.7rem; color: var(--accent); text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; border: 1px solid rgba(0,229,160,0.25); padding: 0.38rem 0.9rem; border-radius: 100px; transition: all 0.2s; flex-shrink: 0; }
+  .sub-note-link:hover { background: rgba(0,229,160,0.08); }
+
+  /* CONTACT */
+  .contact-section { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 3rem; text-align: center; position: relative; overflow: hidden; }
+  .contact-section::before { content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%); width: 300px; height: 300px; background: radial-gradient(circle, rgba(0,229,160,0.06) 0%, transparent 70%); pointer-events: none; }
+  .contact-title { font-family: 'Syne', sans-serif; font-size: clamp(2rem,5vw,3.5rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 1rem; }
+  .contact-sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 2rem; line-height: 1.8; }
+  .contact-email { font-family: 'Syne', sans-serif; font-size: 1.1rem; color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(0,229,160,0.3); padding-bottom: 2px; transition: border-color 0.2s; display: inline-block; margin-bottom: 2rem; }
+  .contact-email:hover { border-color: var(--accent); }
+
+  footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 0.7rem; }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .hero { padding: 7rem 1.5rem 3rem; }
+    .hero h1 { font-size: 2.6rem; }
+    section { padding: 4rem 1.5rem; }
+    .stats-bar { padding: 1.2rem 1.5rem; gap: 1.5rem; flex-wrap: wrap; }
+    .featured-card { flex-direction: column; }
+    .featured-icon { min-width: unset; height: 100px; border-right: none; border-bottom: 1px solid var(--border); }
+    footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+    #about > div:last-child { grid-template-columns: 1fr !important; }
+    .project-metrics { gap: 1rem; }
+    .project-links { flex-wrap: wrap; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .hero-cta { flex-direction: column; }
+    .hero-cta .btn { text-align: center; justify-content: center; }
+  }
+  @media (max-width: 480px) {
+    .hero h1 { font-size: 2rem; }
+    .stat-val { font-size: 1.4rem; }
+  }
+
+  .nav-links a.active { color: var(--accent); }
+
+  /* ── HAMBURGER NAV (mobile) ── */
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; z-index: 200; }
+  .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  @media (max-width: 768px) {
+    .hamburger { display: flex; }
+    .nav-links {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10,10,15,0.97);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      z-index: 150;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links a { font-size: 1rem; letter-spacing: 0.12em; }
+    .nav-logo { z-index: 200; position: relative; }
+  }
+
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#home" class="nav-logo">[ PM ]</a>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="store.html">Store</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="hero" id="home">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Available for freelance work</div>
+    <h1>Data<br><span class="accent">Analyst</span> &<br><span class="accent2">Insight</span> Engineer</h1>
+    <p class="hero-sub">I turn messy, complex datasets into clear decisions. From predictive modeling to interactive dashboards — I make data work for your business.</p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">↓ View My Work</a>
+      <a href="#about" class="btn btn-outline">About Me</a>
+      <a href="#contact" class="btn btn-outline">Hire Me</a>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header">
+    <span class="section-num">00</span>
+    <h2 class="section-title">About Me</h2>
+    <div class="section-line"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;">
+    <div>
+      <p style="font-size:0.88rem;color:var(--muted);line-height:2;margin-bottom:1.2rem;">
+        I'm a data analyst who specializes in turning raw, messy datasets into clear, actionable insights. My work spans predictive modeling, interactive dashboards, and business intelligence — built for decision-makers who don't have time to dig through spreadsheets.
+      </p>
+      <p style="font-size:0.88rem;color:var(--muted);line-height:2;margin-bottom:1.2rem;">
+        I've worked on projects analyzing over 37,000 records, built AI models hitting 81.6% accuracy, and tracked $4M+ in revenue flows — all delivered as clean, visual dashboards anyone can read at a glance.
+      </p>
+      <p style="font-size:0.88rem;color:var(--muted);line-height:2;">
+        I'm currently available for freelance work, contract analysis projects, and custom dashboard builds. I'm based in Kenya and work with clients globally.
+      </p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:0.8rem;">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem;">
+        <div style="font-size:0.62rem;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.6rem;">// Currently</div>
+        <div style="font-size:0.82rem;color:var(--text);">Open to freelance & contract work</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem;">
+        <div style="font-size:0.62rem;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.6rem;">// Based in</div>
+        <div style="font-size:0.82rem;color:var(--text);">Kenya · Working globally</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem;">
+        <div style="font-size:0.62rem;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.6rem;">// Specializes in</div>
+        <div style="font-size:0.82rem;color:var(--text);">Looker Studio · Python · Predictive Models · Automation</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem;">
+        <div style="font-size:0.62rem;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.6rem;">// Turnaround</div>
+        <div style="font-size:0.82rem;color:var(--text);">Most projects delivered in 3–5 days</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stat"><span class="stat-number">3+</span><span class="stat-label">Projects Completed</span></div>
+  <div class="stat"><span class="stat-number">37K+</span><span class="stat-label">Records Analyzed</span></div>
+  <div class="stat"><span class="stat-number">81.6%</span><span class="stat-label">Model Accuracy</span></div>
+  <div class="stat"><span class="stat-number">$4M+</span><span class="stat-label">Revenue Tracked</span></div>
+  <div class="stat"><span class="stat-number">3</span><span class="stat-label">Tools Mastered</span></div>
+</div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header"><span class="section-num">01</span><h2 class="section-title">Selected Work</h2><div class="section-line"></div></div>
+  <div class="projects-grid">
+    <div class="project-card">
+      <div class="project-header"><span class="project-number">Project_01</span><div class="project-tags"><span class="tag green">Looker Studio</span><span class="tag">Business Intelligence</span></div></div>
+      <div class="project-title">Sales & Customer Insights Dashboard</div>
+      <p class="project-desc">Built a comprehensive business intelligence dashboard analyzing revenue streams, profit margins, customer behavior patterns, and engagement metrics. Integrated filters for region, customer type, and product category to enable drill-down analysis for decision-makers.</p>
+      <div class="project-metrics">
+        <div class="metric"><span class="metric-val">$4.05M</span><span class="metric-key">Total Revenue Tracked</span></div>
+        <div class="metric"><span class="metric-val">$2.06M</span><span class="metric-key">Total Profit Analyzed</span></div>
+        <div class="metric"><span class="metric-val">300</span><span class="metric-key">Orders Processed</span></div>
+      </div>
+      <div class="project-links"><a href="https://lookerstudio.google.com/reporting/00dff83f-15fb-4f30-b55d-3e14fa70d39f" target="_blank" class="project-link">↗ Live Dashboard</a><a href="https://github.com/prettymun/Data_analysis_portfolio/tree/main/Sales-customer-insight-dashboard" target="_blank" class="project-link">↗ GitHub Repo</a></div>
+    </div>
+    <div class="project-card">
+      <div class="project-header"><span class="project-number">Project_02</span><div class="project-tags"><span class="tag green">Python</span><span class="tag green">Scikit-Learn</span><span class="tag">Predictive Modeling</span></div></div>
+      <div class="project-title">Saint Louis University — Student Recruitment AI Model</div>
+      <p class="project-desc">End-to-end predictive modeling project to optimize student recruitment outcomes. Covered the full data pipeline: raw data engineering, anomaly detection, feature engineering, high-accuracy classification modeling, and strategic insight delivery.</p>
+      <div class="project-metrics">
+        <div class="metric"><span class="metric-val">81.6%</span><span class="metric-key">Model Accuracy</span></div>
+        <div class="metric"><span class="metric-val">7,371</span><span class="metric-key">Total Applicants</span></div>
+        <div class="metric"><span class="metric-val">44%</span><span class="metric-key">Successful Annotations</span></div>
+      </div>
+      <div class="project-links"><a href="https://lookerstudio.google.com/reporting/36766bbb-f66a-4841-ada3-68f82a456c9a" target="_blank" class="project-link">↗ Live Dashboard</a><a href="https://github.com/prettymun/Data_analysis_portfolio/tree/main/SLU%20File%20Analysis" target="_blank" class="project-link">↗ GitHub Repo</a><a href="https://drive.google.com/file/d/1IVYCn-oCLTaOWdurMWm38sTr9IHg3fAH/view?usp=sharing" target="_blank" class="project-link">↗ Full Report</a></div>
+    </div>
+    <div class="project-card">
+      <div class="project-header"><span class="project-number">Project_03</span><div class="project-tags"><span class="tag green">Looker Studio</span><span class="tag">Funnel Optimization</span><span class="tag">Campaign Analytics</span></div></div>
+      <div class="project-title">Illinois University — Global Outreach Funnel Analysis</div>
+      <p class="project-desc">Identified operational bottlenecks and optimized the conversion funnel for a high-volume global outreach campaign. Analyzed agent performance, connectivity rates, and application lag patterns to surface actionable strategic insights.</p>
+      <div class="project-metrics">
+        <div class="metric"><span class="metric-val">37,795</span><span class="metric-key">Prospects Analyzed</span></div>
+        <div class="metric"><span class="metric-val">23.62%</span><span class="metric-key">Connectivity Rate</span></div>
+        <div class="metric"><span class="metric-val">3.33%</span><span class="metric-key">Conversion Rate</span></div>
+      </div>
+      <div class="project-links"><a href="https://lookerstudio.google.com/reporting/54721032-da1c-4eae-a080-b8a6eeee29a1" target="_blank" class="project-link">↗ Live Dashboard</a><a href="https://drive.google.com/file/d/12mQl-r_aNsAC2TtyLScvlDNNfFEd-wBq/view?usp=sharing" target="_blank" class="project-link">↗ Full Report</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header"><span class="section-num">02</span><h2 class="section-title">Skills & Tools</h2><div class="section-line"></div></div>
+  <div class="skills-grid">
+    <div class="skill-group"><div class="skill-group-title">// Data & Analytics</div><div class="skill-list"><span class="skill-pill">Data Cleaning</span><span class="skill-pill">Exploratory Analysis</span><span class="skill-pill">Statistical Modeling</span><span class="skill-pill">Anomaly Detection</span><span class="skill-pill">Funnel Analysis</span></div></div>
+    <div class="skill-group"><div class="skill-group-title">// Programming</div><div class="skill-list"><span class="skill-pill">Python</span><span class="skill-pill">Scikit-Learn</span><span class="skill-pill">Pandas</span><span class="skill-pill">SQL</span><span class="skill-pill">NumPy</span></div></div>
+    <div class="skill-group"><div class="skill-group-title">// Visualization</div><div class="skill-list"><span class="skill-pill">Looker Studio</span><span class="skill-pill">Excel</span><span class="skill-pill">Google Sheets</span><span class="skill-pill">Dashboard Design</span></div></div>
+    <div class="skill-group"><div class="skill-group-title">// Deliverables</div><div class="skill-list"><span class="skill-pill">Executive Reports</span><span class="skill-pill">Interactive Dashboards</span><span class="skill-pill">Predictive Models</span><span class="skill-pill">Data Pipelines</span></div></div>
+  </div>
+</section>
+
+<!-- STORE PREVIEW -->
+<section id="store">
+  <div class="section-header"><span class="section-num">03</span><h2 class="section-title">Digital Store</h2><div class="section-line"></div></div>
+  <p class="store-intro">Ready-to-use templates and AI-powered automation tools — built by a data analyst, for people who want results without the complexity. Instant download, no fluff.</p>
+
+  <!-- TEMPLATES -->
+  <div class="store-block">
+    <div class="store-block-header">
+      <div class="store-block-label">📊 Templates</div>
+      <a href="store.html#templates" class="view-all">View All Templates →</a>
+    </div>
+    <div class="featured-card">
+      <div class="featured-icon">
+        💰
+        <span class="store-badge badge-hot">Best Seller</span>
+      </div>
+      <div class="featured-body">
+        <div class="featured-cat">Excel / Google Sheets Template</div>
+        <div class="featured-title">Personal Budget Tracker Dashboard</div>
+        <p class="featured-desc">A complete, visual budget tracker with auto-calculating charts, color-coded spend alerts, income tracking, expense categories, savings goals tracker, and a 12-month log. Built for real people — not just spreadsheet nerds.</p>
+        <div class="featured-footer">
+          <div>
+            <div class="featured-price">$5 <span class="orig">per edition</span></div>
+            <div class="featured-variants">7 editions available: <span>Solo · Family of 3 · Family of 4 · Newly Married · Savings-First · Student · Retiree</span></div>
+          </div>
+          <a href="store.html#templates" class="btn-view">View All Editions →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AGENTIC AI TOOLS -->
+  <div class="store-block">
+    <div class="store-block-header">
+      <div class="store-block-label">🤖 Agentic AI Tools</div>
+      <a href="store.html#ai-tools" class="view-all">View All Agents →</a>
+    </div>
+    <div class="featured-card">
+      <div class="featured-icon">
+        🤖
+        <span class="store-badge badge-ai">AI-Powered</span>
+      </div>
+      <div class="featured-body">
+        <div class="featured-cat">n8n Workflow</div>
+        <div class="featured-title">Automated Lead Capture & CRM Updater</div>
+        <p class="featured-desc">An n8n workflow that captures form submissions, scores leads automatically, and updates your Google Sheet or Notion CRM — zero manual work. Comes with full setup documentation so you can run it the same day.</p>
+        <div class="featured-footer">
+          <div class="featured-price">$15</div>
+          <a href="store.html#ai-tools" class="btn-view">View All Agents →</a>
+        </div>
+      </div>
+    </div>
+    <div class="sub-note purple">
+      <div class="tools-text"><span class="hi">// Tools used:</span> n8n · Make.com · Zapier · OpenAI API · Google Sheets · Notion · Gmail · WhatsApp Business API. All workflows include full setup documentation.</div>
+      <a href="store.html#ai-tools" class="sub-note-link">View More Agents →</a>
+    </div>
+  </div>
+
+  <!-- CUSTOM ORDERS -->
+  <div class="store-block">
+    <div class="store-block-header">
+      <div class="store-block-label">⚡ Custom Orders</div>
+      <a href="store.html#custom" class="view-all">View All Services →</a>
+    </div>
+    <div class="featured-card">
+      <div class="featured-icon">🎨</div>
+      <div class="featured-body">
+        <div class="featured-cat">Custom Build</div>
+        <div class="featured-title">Custom Dashboard (Looker Studio)</div>
+        <p class="featured-desc">Send me your data and goals. I'll build a fully custom Looker Studio dashboard tailored to your business — interactive filters, branded visuals, clear insights. Delivered in 3–5 days with a walkthrough included.</p>
+        <div class="featured-footer">
+          <div class="featured-price">From $30</div>
+          <a href="store.html#custom" class="btn-view">View All Services →</a>
+        </div>
+      </div>
+    </div>
+    <div class="sub-note green">
+      <div>Need something specific that isn't listed? Every custom order is scoped to your exact needs — data analysis, automation, dashboards, or full reports. Fast turnaround, clear communication.</div>
+      <a href="store.html#custom" class="sub-note-link">View All Custom Orders →</a>
+    </div>
+  </div>
+
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-section">
+    <div class="contact-title">Let's Work<br><span style="color:var(--accent)">Together</span></div>
+    <p class="contact-sub">Available for freelance projects, data analysis contracts,<br>and dashboard builds. Fast turnaround, clear communication.</p>
+    <a href="/cdn-cgi/l/email-protection#532a3c262113363e323a3f7d303c3e" class="contact-email"><span class="__cf_email__" data-cfemail="d1a8bea4a391b4bcb0b8bdffb2bebc">[email&#160;protected]</span></a><br>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1rem;">
+      <a href="https://www.fiverr.com/users/prettymuna" target="_blank" class="btn btn-primary">↗ Hire on Fiverr</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 Purity Musambi</span>
+  <a href="store.html" style="color:var(--accent);text-decoration:none;">↗ Visit Store</a>
+</footer>
+
+<script>
+// Scroll-spy: highlight active nav link
+const sections = ['home','about','projects','skills','store','contact'];
+const navLinks = document.querySelectorAll('.nav-links a');
+
+function setActive() {
+  let current = 'home';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 120) current = id;
+  });
+  navLinks.forEach(a => {
+    a.classList.remove('active');
+    const href = a.getAttribute('href');
+    if (href === '#' + current || (href === 'store.html' && current === 'store')) {
+      a.classList.add('active');
+    }
+  });
+}
+window.addEventListener('scroll', setActive);
+setActive();
+</script>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.querySelector('.nav-links');
+  if (hamburger && navLinks) {
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      navLinks.classList.toggle('open');
+      document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
+    });
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        navLinks.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+  }
+</script>
+
+</body>
+</html>
