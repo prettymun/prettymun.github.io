@@ -208,11 +208,11 @@
     <!-- LEFT: Info -->
     <div class="info-col">
 
-      <a href="/cdn-cgi/l/email-protection#d4b5a2a1b8b5b9a1a7bda4a1a6bda0ad94b3b9b5bdb8fab7bbb9" class="info-card">
+      <a href="mailto:avulamusipurity@gmail.com" class="info-card">
         <div class="info-card-icon">✉</div>
         <div class="info-card-body">
           <div class="info-card-label">Email</div>
-          <div class="info-card-value"><span class="__cf_email__" data-cfemail="4524333029242830362c3530372c313c052228242c296b262a28">[email&#160;protected]</span></div>
+          <div class="info-card-value">avulamusipurity@gmail.com</div>
           <div class="info-card-note">Best way to reach me · 24h response</div>
         </div>
         <div class="info-card-arrow">↗</div>
@@ -405,19 +405,20 @@
   <a href="index.html">← Back to Portfolio</a>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-function handleSubmit() {
-  const fname = document.getElementById('fname').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const message = document.getElementById('message').value.trim();
 
+<script>
+function handleSubmit() {
+  const fname    = document.getElementById('fname').value.trim();
+  const lname    = document.getElementById('lname').value.trim();
+  const email    = document.getElementById('email').value.trim();
+  const message  = document.getElementById('message').value.trim();
+  const service  = document.getElementById('service').value  || 'Not specified';
+  const budget   = document.getElementById('budget').value   || 'Not specified';
+  const timeline = document.getElementById('timeline').value || 'Not specified';
+
+  // Validate required fields
   if (!fname || !email || !message) {
-    // Highlight empty required fields
-    [
-      {id:'fname', val:fname},
-      {id:'email', val:email},
-      {id:'message', val:message}
-    ].forEach(f => {
+    [{id:'fname',val:fname},{id:'email',val:email},{id:'message',val:message}].forEach(f => {
       const el = document.getElementById(f.id);
       if (!f.val) {
         el.style.borderColor = '#ff6450';
@@ -427,15 +428,46 @@ function handleSubmit() {
     return;
   }
 
-  // Build mailto link with all form data
-  const service  = document.getElementById('service').value  || 'Not specified';
-  const budget   = document.getElementById('budget').value   || 'Not specified';
-  const timeline = document.getElementById('timeline').value || 'Not specified';
-  const lname    = document.getElementById('lname').value.trim();
-
-  const subject = encodeURIComponent(`[Portfolio Contact] ${service} — ${fname} ${lname}`);
+  // Build mailto
+  const subject = encodeURIComponent('[Portfolio Contact] ' + service + ' — ' + fname + ' ' + lname);
   const body = encodeURIComponent(
-    `Name: ${fname} ${lname}\nEmail: ${email}\n\nService Needed: ${service}\nBudget: ${budget}\nTimeline: ${timeline}\n\nMessage:\n${message}`
+    'Name: ' + fname + ' ' + lname +
+    '\nEmail: ' + email +
+    '\n\nService Needed: ' + service +
+    '\nBudget: ' + budget +
+    '\nTimeline: ' + timeline +
+    '\n\nMessage:\n' + message
   );
 
-  window.location.href = `mailto:avulamusipurity@gmail.com?subject=${subject}&body
+  window.open('mailto:avulamusipurity@gmail.com?subject=' + subject + '&body=' + body);
+}
+
+// FAQ Accordion
+document.querySelectorAll('.faq-item').forEach(item => {
+  item.querySelector('.faq-q').addEventListener('click', () => {
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
+// Hamburger nav
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.querySelector('.nav-links');
+if (hamburger && navLinks) {
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    navLinks.classList.toggle('open');
+    document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      navLinks.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+}
+</script>
+</body>
+</html>
