@@ -208,11 +208,11 @@
     <!-- LEFT: Info -->
     <div class="info-col">
 
-      <a href="mailto:avulamusipurity@gmail.com" class="info-card">
+      <a href="/cdn-cgi/l/email-protection#3a5b4c4f565b574f49534a4f48534e437a5d575b535614595557" class="info-card">
         <div class="info-card-icon">✉</div>
         <div class="info-card-body">
           <div class="info-card-label">Email</div>
-          <div class="info-card-value">avulamusipurity@gmail.com</div>
+          <div class="info-card-value"><span class="__cf_email__" data-cfemail="ceafb8bba2afa3bbbda7bebbbca7bab78ea9a3afa7a2e0ada1a3">[email&#160;protected]</span></div>
           <div class="info-card-note">Best way to reach me · 24h response</div>
         </div>
         <div class="info-card-arrow">↗</div>
@@ -406,8 +406,8 @@
 </footer>
 
 
-<script>
-function handleSubmit() {
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+async function handleSubmit() {
   const fname    = document.getElementById('fname').value.trim();
   const lname    = document.getElementById('lname').value.trim();
   const email    = document.getElementById('email').value.trim();
@@ -428,18 +428,37 @@ function handleSubmit() {
     return;
   }
 
-  // Build mailto
-  const subject = encodeURIComponent('[Portfolio Contact] ' + service + ' — ' + fname + ' ' + lname);
-  const body = encodeURIComponent(
-    'Name: ' + fname + ' ' + lname +
-    '\nEmail: ' + email +
-    '\n\nService Needed: ' + service +
-    '\nBudget: ' + budget +
-    '\nTimeline: ' + timeline +
-    '\n\nMessage:\n' + message
-  );
+  // Disable button and show sending state
+  const btn = document.querySelector('.form-submit');
+  btn.textContent = '⏳ Sending...';
+  btn.disabled = true;
 
-  window.open('mailto:avulamusipurity@gmail.com?subject=' + subject + '&body=' + body);
+  try {
+    const response = await fetch('https://formspree.io/f/xlgppenp', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name:     fname + ' ' + lname,
+        email:    email,
+        service:  service,
+        budget:   budget,
+        timeline: timeline,
+        message:  message
+      })
+    });
+
+    if (response.ok) {
+      // Show success state
+      document.getElementById('contact-form-wrap').style.display = 'none';
+      document.getElementById('form-success').classList.add('show');
+    } else {
+      btn.textContent = '✕ Something went wrong — try again';
+      btn.disabled = false;
+    }
+  } catch (err) {
+    btn.textContent = '✕ Network error — try again';
+    btn.disabled = false;
+  }
 }
 
 // FAQ Accordion
@@ -459,15 +478,4 @@ if (hamburger && navLinks) {
     hamburger.classList.toggle('open');
     navLinks.classList.toggle('open');
     document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
-  });
-  navLinks.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      hamburger.classList.remove('open');
-      navLinks.classList.remove('open');
-      document.body.style.overflow = '';
-    });
-  });
-}
-</script>
-</body>
-</html>
+  })
